@@ -1,34 +1,32 @@
- const STORAGE_KEY = 'order-management';
+ const DAY_SECONDS = 24 * 60 * 60 * 1000
 
- export default {
-    setItem(key: string, value: undefined, module_name: undefined){
-        if (module_name) {
-            let val = this.getItem(key, module_name);
-            val[key] = value;
-            this.setItem(key, val, module_name);
-        } else {
-            let val = this.getStorage();
-            val[key] = value;
-            window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(val));
-        }  
-    },
-    getItem(key: string, module_name: undefined){
-        if (module_name) {
-            let val : object = this.getItem(key, module_name);
-            if (val) return val[key];
+ const writeTime = new Date().getTime()
+ 
+ const storage = {
+    setItem: (key: string, value: any, expire: number = 7) => {
+        const obj = {
+            key, value, writeTime, expire
         }
-        return this.getStorage()[key];
+        localStorage.setItem(key, JSON.stringify(value))
     },
-    getStorage(){
-        return JSON.parse(window.sessionStorage.getItem(STORAGE_KEY) || '{}');
-    },
-    clear(key: string | number, module_name: string | number){
-        let val = this.getStorage();
-        if (module_name) {
-            delete val[module_name][key];
-        } else {
-            delete val[key];
+    getItem: (key: string) => {
+        let val = localStorage.getItem(key);
+        if (val === null || typeof val === 'undefined') {
+            return null;
         }
-        this.setItem(key, module_name, val);
+        const result = JSON.parse(val);
+        const readTime = new Date().getTime();
+        if ((readTime - result.writeTime) / DAY_SECONDS > result.expire) {
+            localStorage.removeItem(key);
+            return null;
+        } else {
+            return result.value;
+        }
+    },
+    deleteItem:(key:string) => {
+        if (!key) return;
+        localStorage.clearItem(key);
     },
  }
+
+ export default storage
