@@ -25,8 +25,17 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ```sh
 nvm install 16.13.0
+
 nvm use 16.13.0
+
 npm install
+```
+
+### Install json-server for mocking api data
+```sh
+npm install -g json-server
+
+json-server --watch db.json
 ```
 
 ### Compile and Hot-Reload for Development
