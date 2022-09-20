@@ -1,4 +1,4 @@
-# learn-vue
+# order-management
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -24,6 +24,8 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
+nvm install 16.13.0
+nvm use 16.13.0
 npm install
 ```
 
